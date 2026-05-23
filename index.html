@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phân loại dữ liệu HR · Chuẩn DAMA · TKG Training</title>
+<meta name="description" content="Học liệu tương tác: phân loại dữ liệu HR theo 4 trục chuẩn DAMA — định lượng/định tính, cấu trúc/bán cấu trúc/phi cấu trúc, master/giao dịch, nóng/lạnh. Có lab kéo–thả và quiz.">
+<meta name="author" content="HR Analytics x GenAI Training">
+<meta name="theme-color" content="#070b14">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Phân loại dữ liệu HR · Chuẩn DAMA">
+<meta property="og:description" content="Học liệu tương tác về phân loại dữ liệu HR theo chuẩn DAMA — Buổi 3 chương trình HR Analytics x Generative AI.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070b14'/%3E%3Cg fill='none' stroke='%2322d3ee' stroke-width='3.5' stroke-linecap='round'%3E%3Cellipse cx='32' cy='20' rx='15' ry='7'/%3E%3Cpath d='M17 20v24c0 3.9 6.7 7 15 7s15-3.1 15-7V20'/%3E%3Cpath d='M17 32c0 3.9 6.7 7 15 7s15-3.1 15-7'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css" rel="stylesheet">
+<style>
+/* icon Tabler — ép đúng font, tránh hiện ký tự fallback lạ nếu CDN lỗi */
+.ti{font-family:'tabler-icons'!important;font-style:normal!important;font-weight:400!important;
+    speak:none;-webkit-font-smoothing:antialiased;line-height:1;display:inline-block}
+:root{
+  --bg:#070b14;
+  --bg-2:#0c1322;
+  --panel:#101a2e;
+  --panel-2:#15233d;
+  --line:rgba(120,160,220,.14);
+  --line-strong:rgba(120,160,220,.30);
+  --txt:#e8eefc;
+  --txt-2:#9fb0d0;
+  --txt-3:#5f6f8f;
+  --cyan:#22d3ee;
+  --blue:#3b82f6;
+  --violet:#8b5cf6;
+  --pink:#ec4899;
+  --amber:#f59e0b;
+  --green:#10b981;
+  --teal:#14b8a6;
+  --red:#ef4444;
+  --glow-cyan:0 0 24px rgba(34,211,238,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Be Vietnam Pro',sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+/* ---- background grid + glow ---- */
+.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-fx::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(60,110,200,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(60,110,200,.05) 1px,transparent 1px);
+  background-size:54px 54px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 80%);
+}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.32}
+.orb-1{width:480px;height:480px;background:#1d4ed8;top:-180px;left:-120px}
+.orb-2{width:420px;height:420px;background:#7c3aed;top:340px;right:-160px}
+.orb-3{width:380px;height:380px;background:#0891b2;top:1500px;left:-100px}
+
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ---- header ---- */
+header{padding:64px 0 36px;text-align:center}
+.tagchip{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--cyan);
+  border:1px solid rgba(34,211,238,.32);
+  background:rgba(34,211,238,.07);
+  border-radius:999px;padding:7px 16px;margin-bottom:22px;
+}
+.tagchip i{font-size:14px}
+h1{
+  font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:-.02em;line-height:1.12;
+  background:linear-gradient(120deg,#fff 20%,#7dd3fc 55%,#a78bfa 90%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.sub{margin:18px auto 0;max-width:620px;color:var(--txt-2);font-size:15px}
+.meta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.meta-pill{
+  font-size:12px;color:var(--txt-2);
+  border:1px solid var(--line);background:var(--panel);
+  border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:6px;
+}
+.meta-pill i{color:var(--cyan);font-size:15px}
+
+/* ---- section ---- */
+section{padding:30px 0}
+.sec-head{display:flex;align-items:center;gap:13px;margin-bottom:8px}
+.sec-num{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+  width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(34,211,238,.16),rgba(139,92,246,.16));
+  border:1px solid var(--line-strong);color:var(--cyan);flex-shrink:0;
+}
+.sec-head h2{font-size:23px;font-weight:700;letter-spacing:-.01em}
+.sec-desc{color:var(--txt-2);font-size:14px;margin:0 0 22px 47px}
+
+/* ---- DAMA axis legend ---- */
+.axis-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.axis-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;
+  position:relative;overflow:hidden;transition:.25s;
+}
+.axis-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ac)}
+.axis-card:hover{transform:translateY(-3px);border-color:var(--line-strong)}
+.axis-ic{
+  width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:21px;margin-bottom:12px;background:var(--acbg);color:var(--ac);
+}
+.axis-card h3{font-size:14px;font-weight:600;margin-bottom:5px}
+.axis-card p{font-size:12px;color:var(--txt-2);line-height:1.55}
+.axis-tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt-3);
+  margin-top:10px;letter-spacing:.5px;
+}
+
+/* ---- comparison pairs ---- */
+.pair{
+  background:linear-gradient(180deg,var(--panel),var(--bg-2));
+  border:1px solid var(--line);border-radius:18px;
+  padding:26px;margin-bottom:22px;position:relative;
+}
+.pair-head{display:flex;align-items:center;gap:13px;margin-bottom:6px}
+.pair-badge{
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+  width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  color:#fff;flex-shrink:0;
+}
+.pair-head h3{font-size:19px;font-weight:700}
+.pair-criterion{
+  font-size:12px;color:var(--txt-2);margin:0 0 18px 51px;
+}
+.pair-criterion b{color:var(--txt)}
+.pair-criterion .crit-tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:2px 7px;color:var(--cyan);margin-right:8px;text-transform:uppercase;letter-spacing:.5px;
+}
+.cmp{display:grid;grid-template-columns:1fr 44px 1fr;align-items:stretch;gap:0}
+.side{
+  border-radius:13px;padding:18px;border:1px solid var(--sl);
+  background:var(--sbg);transition:.2s;
+}
+.side:hover{transform:scale(1.012)}
+.side-head{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.side-head i{font-size:20px;color:var(--sc)}
+.side-head h4{font-size:14px;font-weight:600;color:var(--sc)}
+.side-mono{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt-3);margin-bottom:12px}
+.side ul{list-style:none}
+.side li{
+  font-size:12.5px;color:var(--txt-2);padding:5px 0;display:flex;gap:8px;align-items:flex-start;
+  border-bottom:1px dashed rgba(120,160,220,.07);
+}
+.side li:last-child{border-bottom:none}
+.side li i{font-size:14px;color:var(--sc);flex-shrink:0;margin-top:2px}
+.vs{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;
+}
+.vs span{
+  width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--panel-2);border:1px solid var(--line-strong);color:var(--txt-2);
+}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.trio-def{font-size:12px;color:var(--txt-2);line-height:1.55;margin-bottom:12px}
+.trio-def b{color:var(--txt)}
+.spectrum-bar{
+  display:flex;align-items:center;gap:12px;margin:0 0 16px 51px;
+  font-size:10.5px;font-family:'JetBrains Mono',monospace;color:var(--txt-3);
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.spectrum-line{
+  flex:1;height:3px;border-radius:3px;
+  background:linear-gradient(90deg,#14b8a6,#22d3ee,#a78bfa);
+}
+
+/* ---- interactive sorter ---- */
+.lab{
+  background:var(--panel);border:1px solid var(--line-strong);border-radius:18px;padding:26px;
+}
+.lab-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.lab-tab{
+  font-size:12px;font-weight:600;color:var(--txt-2);cursor:pointer;
+  border:1px solid var(--line);background:var(--bg-2);border-radius:9px;
+  padding:9px 15px;display:flex;align-items:center;gap:7px;transition:.18s;
+}
+.lab-tab i{font-size:15px}
+.lab-tab:hover{border-color:var(--line-strong);color:var(--txt)}
+.lab-tab.on{
+  background:linear-gradient(135deg,rgba(34,211,238,.16),rgba(59,130,246,.16));
+  border-color:var(--cyan);color:var(--cyan);box-shadow:var(--glow-cyan);
+}
+.sorter-hint{font-size:12px;color:var(--txt-3);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.sorter-hint i{color:var(--amber)}
+.sorter-hint b{color:var(--txt-2);font-weight:600}
+.chip-pool{display:flex;flex-wrap:wrap;gap:9px;min-height:54px;margin-bottom:20px}
+.dchip{
+  font-size:12.5px;cursor:grab;user-select:none;
+  border:1px solid var(--line-strong);background:var(--panel-2);
+  border-radius:9px;padding:9px 14px;display:flex;align-items:center;gap:7px;
+  transition:.15s;
+}
+.dchip:active{cursor:grabbing;transform:scale(.96)}
+.dchip i{font-size:14px;color:var(--cyan)}
+.dchip.placed{opacity:.35;pointer-events:none}
+.dchip.dragging{opacity:.5;border-color:var(--cyan)}
+.dchip.selected{
+  border-color:var(--cyan);background:rgba(34,211,238,.14);
+  box-shadow:0 0 0 2px rgba(34,211,238,.28),var(--glow-cyan);
+}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bins.cols3{grid-template-columns:repeat(3,1fr)}
+.bin{
+  border:2px dashed var(--line-strong);border-radius:14px;padding:16px;min-height:150px;
+  transition:.2s;
+}
+.bin.over{border-color:var(--cyan);background:rgba(34,211,238,.05)}
+.bin-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;margin-bottom:12px;color:var(--bc)}
+.bin-title i{font-size:18px}
+.bin-drop{display:flex;flex-wrap:wrap;gap:8px}
+.bin .dchip{cursor:pointer}
+.bin .dchip.ok{border-color:var(--green);background:rgba(16,185,129,.12)}
+.bin .dchip.ok i{color:var(--green)}
+.bin .dchip.bad{border-color:var(--red);background:rgba(239,68,68,.12)}
+.bin .dchip.bad i{color:var(--red)}
+.lab-foot{display:flex;align-items:center;gap:14px;margin-top:20px;flex-wrap:wrap}
+.btn{
+  font-family:'Be Vietnam Pro',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;
+  border-radius:9px;padding:10px 18px;display:flex;align-items:center;gap:7px;transition:.18s;
+  border:1px solid var(--line-strong);background:var(--bg-2);color:var(--txt);
+}
+.btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn.primary{
+  background:linear-gradient(135deg,var(--cyan),var(--blue));border:none;color:#04121f;
+}
+.btn.primary:hover{box-shadow:var(--glow-cyan);color:#04121f}
+.score-box{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+  padding:9px 16px;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);
+  color:var(--txt-2);
+}
+.score-box.good{color:var(--green);border-color:rgba(16,185,129,.4)}
+.score-box.mid{color:var(--amber);border-color:rgba(245,158,11,.4)}
+.score-box.low{color:var(--red);border-color:rgba(239,68,68,.4)}
+
+/* ---- quiz ---- */
+.quiz{background:var(--panel);border:1px solid var(--line-strong);border-radius:18px;padding:26px}
+.q-progress{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt-3);margin-bottom:8px}
+.q-bar{height:4px;background:var(--panel-2);border-radius:4px;margin-bottom:22px;overflow:hidden}
+.q-bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--violet));width:0;transition:.4s}
+.q-text{font-size:17px;font-weight:600;margin-bottom:6px}
+.q-scenario{font-size:13px;color:var(--txt-2);margin-bottom:18px}
+.q-opts{display:grid;gap:10px}
+.q-opt{
+  font-size:13px;cursor:pointer;text-align:left;
+  border:1px solid var(--line);background:var(--bg-2);border-radius:11px;
+  padding:14px 16px;display:flex;align-items:center;gap:11px;transition:.16s;color:var(--txt);
+}
+.q-opt:hover{border-color:var(--line-strong);background:var(--panel-2)}
+.q-opt .dot{
+  width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line-strong);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.q-opt.correct{border-color:var(--green);background:rgba(16,185,129,.1)}
+.q-opt.correct .dot{border-color:var(--green);background:var(--green);color:#04121f}
+.q-opt.wrong{border-color:var(--red);background:rgba(239,68,68,.1)}
+.q-opt.wrong .dot{border-color:var(--red);background:var(--red);color:#fff}
+.q-opt.disabled{pointer-events:none}
+.q-explain{
+  margin-top:16px;font-size:13px;color:var(--txt-2);
+  border-left:3px solid var(--cyan);background:var(--bg-2);
+  padding:13px 16px;border-radius:0 9px 9px 0;display:none;
+}
+.q-explain.show{display:block}
+.q-explain b{color:var(--cyan)}
+.q-foot{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.q-result{
+  text-align:center;padding:30px 20px;display:none;
+}
+.q-result.show{display:block}
+.q-result .big{
+  font-family:'JetBrains Mono',monospace;font-size:46px;font-weight:700;
+  background:linear-gradient(120deg,var(--cyan),var(--violet));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.q-result p{color:var(--txt-2);font-size:14px;margin:8px 0 18px}
+
+/* ---- correction / TKG notes ---- */
+.note-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.note-grid.one{grid-template-columns:1fr}
+.note-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;
+  border-left:3px solid var(--nc);
+}
+.note-card h4{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--nc)}
+.note-card h4 i{font-size:18px}
+.note-card ul{list-style:none}
+.note-card li{font-size:12.5px;color:var(--txt-2);padding:4px 0;display:flex;gap:8px;align-items:flex-start}
+.note-card li i{font-size:14px;color:var(--nc);flex-shrink:0;margin-top:3px}
+.note-card li b{color:var(--txt)}
+
+.tkg-box{
+  margin-top:20px;background:linear-gradient(120deg,rgba(34,211,238,.07),rgba(139,92,246,.07));
+  border:1px solid var(--line-strong);border-radius:16px;padding:22px;
+}
+.tkg-box h4{font-size:15px;font-weight:700;display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.tkg-box h4 i{color:var(--cyan);font-size:20px}
+.tkg-box p{font-size:13px;color:var(--txt-2)}
+.tkg-box .pipeline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px}
+.pstep{
+  font-size:11.5px;font-weight:600;border:1px solid var(--line);background:var(--panel);
+  border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:6px;color:var(--txt-2);
+}
+.pstep i{font-size:14px;color:var(--cyan)}
+.parrow{color:var(--txt-3);font-size:14px}
+
+footer{
+  text-align:center;padding:44px 0 56px;color:var(--txt-3);font-size:12px;
+  border-top:1px solid var(--line);margin-top:40px;
+}
+footer b{color:var(--txt-2)}
+
+@media(max-width:880px){
+  .axis-grid{grid-template-columns:1fr 1fr}
+  .cmp{grid-template-columns:1fr;gap:12px}
+  .trio{grid-template-columns:1fr}
+  .vs{transform:rotate(90deg)}
+  .note-grid{grid-template-columns:1fr}
+  .bins{grid-template-columns:1fr}
+  .spectrum-bar{margin-left:0}
+}
+@media(max-width:520px){
+  .axis-grid{grid-template-columns:1fr}
+  .wrap{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-fx">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<div class="wrap">
+
+<header>
+  <div class="tagchip">Buổi 3 · Năng lực &amp; Quản lý dữ liệu HR</div>
+  <h1>Phân loại dữ liệu HR</h1>
+  <p class="sub">4 trục phân loại cốt lõi theo chuẩn DAMA — Data Management Body of Knowledge. Tương tác, kéo–thả và kiểm tra ngay trên trang.</p>
+  <div class="meta-row">
+    <div class="meta-pill"><i class="ti ti-building-factory-2"></i> TaeKwang Vina · HR Analytics x GenAI</div>
+    <div class="meta-pill"><i class="ti ti-checkbox"></i> Chuẩn DAMA-DMBOK</div>
+    <div class="meta-pill"><i class="ti ti-hand-click"></i> 4 trục · 1 lab · 8 câu quiz</div>
+  </div>
+</header>
+
+<!-- ===== SECTION 1 : DAMA AXES ===== -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">01</div>
+    <h2>Bốn trục phân loại theo DAMA</h2>
+  </div>
+  <p class="sec-desc">Cùng một dữ liệu HR có thể được phân loại theo nhiều trục khác nhau — mỗi trục trả lời một câu hỏi quản trị riêng.</p>
+  <div class="axis-grid">
+    <div class="axis-card" style="--ac:#22d3ee;--acbg:rgba(34,211,238,.12)">
+      <div class="axis-ic"><i class="ti ti-ruler-2"></i></div>
+      <h3>Bản chất đo lường</h3>
+      <p>Dữ liệu đo được bằng con số, hay chỉ mô tả bằng lời?</p>
+      <div class="axis-tag">→ Định lượng / Định tính</div>
+    </div>
+    <div class="axis-card" style="--ac:#14b8a6;--acbg:rgba(20,184,166,.12)">
+      <div class="axis-ic"><i class="ti ti-layout-grid"></i></div>
+      <h3>Mức độ tổ chức</h3>
+      <p>Dữ liệu được tổ chức chặt chẽ, có thẻ mô tả, hay hoàn toàn tự do?</p>
+      <div class="axis-tag">→ Cấu trúc / Bán cấu trúc / Phi cấu trúc</div>
+    </div>
+    <div class="axis-card" style="--ac:#8b5cf6;--acbg:rgba(139,92,246,.12)">
+      <div class="axis-ic"><i class="ti ti-refresh-alert"></i></div>
+      <h3>Tần suất thay đổi</h3>
+      <p>Dữ liệu ổn định lâu dài, hay phát sinh liên tục theo hoạt động?</p>
+      <div class="axis-tag">→ Master / Giao dịch</div>
+    </div>
+    <div class="axis-card" style="--ac:#f59e0b;--acbg:rgba(245,158,11,.12)">
+      <div class="axis-ic"><i class="ti ti-temperature"></i></div>
+      <h3>Tần suất truy cập</h3>
+      <p>Dữ liệu được dùng hàng ngày, hay chỉ lưu trữ cho kiểm toán?</p>
+      <div class="axis-tag">→ Nóng / Lạnh</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 2 : PAIRS ===== -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">02</div>
+    <h2>So sánh từng cặp · ví dụ thực tế nhà máy</h2>
+  </div>
+  <p class="sec-desc">Mỗi cặp kèm ví dụ lấy từ bối cảnh nhà máy sản xuất giày — học viên TKG áp dụng được ngay.</p>
+
+  <!-- PAIR 1 -->
+  <div class="pair">
+    <div class="pair-head">
+      <div class="pair-badge" style="background:linear-gradient(135deg,#06b6d4,#3b82f6)">01</div>
+      <h3>Định lượng vs Định tính</h3>
+    </div>
+    <p class="pair-criterion"><span class="crit-tag">Trục 1</span> Phân loại theo <b>bản chất đo lường</b> — số liệu tính toán được vs thông tin mô tả.</p>
+    <div class="cmp">
+      <div class="side" style="--sc:#22d3ee;--sl:rgba(34,211,238,.3);--sbg:rgba(34,211,238,.06)">
+        <div class="side-head"><i class="ti ti-calculator"></i><h4>Định lượng — Quantitative</h4></div>
+        <div class="side-mono">measurable · numeric · aggregable</div>
+        <ul>
+          <li><i class="ti ti-point"></i>Tuổi, thâm niên (năm), số ngày phép còn lại</li>
+          <li><i class="ti ti-point"></i>Lương cơ bản, phụ cấp ca, tổng thu nhập tháng</li>
+          <li><i class="ti ti-point"></i>Điểm đánh giá hiệu suất thang 1–5</li>
+          <li><i class="ti ti-point"></i>Tỷ lệ nghỉ việc %, headcount, span of control</li>
+          <li><i class="ti ti-point"></i>Số giờ tăng ca, sản lượng/công nhân, chi phí tuyển</li>
+        </ul>
+      </div>
+      <div class="vs"><span>VS</span></div>
+      <div class="side" style="--sc:#f59e0b;--sl:rgba(245,158,11,.3);--sbg:rgba(245,158,11,.06)">
+        <div class="side-head"><i class="ti ti-message-2"></i><h4>Định tính — Qualitative</h4></div>
+        <div class="side-mono">descriptive · textual · interpretive</div>
+        <ul>
+          <li><i class="ti ti-point"></i>Nhận xét đánh giá năng lực của quản lý</li>
+          <li><i class="ti ti-point"></i>Lý do nghỉ việc trong phỏng vấn exit interview</li>
+          <li><i class="ti ti-point"></i>Câu trả lời mở trong khảo sát gắn kết nhân viên</li>
+          <li><i class="ti ti-point"></i>Ghi chú phỏng vấn tuyển dụng, nhận xét 360</li>
+          <li><i class="ti ti-point"></i>Mô tả công việc, nội dung OKR dạng văn bản</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAIR 2 -->
+  <div class="pair">
+    <div class="pair-head">
+      <div class="pair-badge" style="background:linear-gradient(135deg,#14b8a6,#10b981)">02</div>
+      <h3>Có cấu trúc · Bán cấu trúc · Phi cấu trúc</h3>
+    </div>
+    <p class="pair-criterion"><span class="crit-tag">Trục 2</span> Phân loại theo <b>mức độ tổ chức của dữ liệu</b> — một phổ liên tục từ chặt chẽ (bảng định sẵn) đến tự do hoàn toàn.</p>
+    <div class="spectrum-bar">
+      <span>Tổ chức chặt chẽ</span>
+      <div class="spectrum-line"></div>
+      <span>Tự do hoàn toàn</span>
+    </div>
+    <div class="trio">
+      <div class="side" style="--sc:#14b8a6;--sl:rgba(20,184,166,.3);--sbg:rgba(20,184,166,.06)">
+        <div class="side-head"><i class="ti ti-table"></i><h4>Có cấu trúc</h4></div>
+        <div class="side-mono">Structured · rows × columns</div>
+        <p class="trio-def">Tuân theo mô hình dữ liệu định sẵn, nằm gọn trong bảng hàng–cột, truy vấn được ngay bằng SQL.</p>
+        <ul>
+          <li><i class="ti ti-point"></i>Bảng nhân viên trong HRIS (SAP, Oracle HCM)</li>
+          <li><i class="ti ti-point"></i>Bảng chấm công, bảng lương trên Payroll</li>
+          <li><i class="ti ti-point"></i>Database ứng viên trên hệ thống ATS</li>
+          <li><i class="ti ti-point"></i>File CSV / Excel xuất từ hệ thống</li>
+        </ul>
+      </div>
+      <div class="side" style="--sc:#22d3ee;--sl:rgba(34,211,238,.3);--sbg:rgba(34,211,238,.06)">
+        <div class="side-head"><i class="ti ti-code"></i><h4>Bán cấu trúc</h4></div>
+        <div class="side-mono">Semi-structured · self-describing</div>
+        <p class="trio-def">Không nằm trong bảng cố định, nhưng có <b>thẻ / nhãn / khóa</b> tự mô tả để máy đọc và phân tách được.</p>
+        <ul>
+          <li><i class="ti ti-point"></i>File JSON / XML từ API máy chấm công</li>
+          <li><i class="ti ti-point"></i>Email có header (người gửi, ngày, tiêu đề)</li>
+          <li><i class="ti ti-point"></i>CV ứng viên do hệ thống ATS bóc tách (parsed)</li>
+          <li><i class="ti ti-point"></i>Log hệ thống HRIS, dữ liệu khảo sát xuất ra</li>
+        </ul>
+      </div>
+      <div class="side" style="--sc:#a78bfa;--sl:rgba(167,139,250,.3);--sbg:rgba(167,139,250,.06)">
+        <div class="side-head"><i class="ti ti-file-stack"></i><h4>Phi cấu trúc</h4></div>
+        <div class="side-mono">Unstructured · free-form</div>
+        <p class="trio-def">Không có mô hình hay thẻ mô tả nào; cần công cụ AI xử lý trước khi phân tích được.</p>
+        <ul>
+          <li><i class="ti ti-point"></i>Video phỏng vấn, file ghi âm buổi đào tạo</li>
+          <li><i class="ti ti-point"></i>Hồ sơ scan dạng ảnh (CCCD, bằng cấp chụp)</li>
+          <li><i class="ti ti-point"></i>Báo cáo Word / PDF dạng văn xuôi</li>
+          <li><i class="ti ti-point"></i>Ảnh sự kiện, tin nhắn chat, ghi chú họp</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAIR 3 -->
+  <div class="pair">
+    <div class="pair-head">
+      <div class="pair-badge" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">03</div>
+      <h3>Master Data vs Dữ liệu giao dịch</h3>
+    </div>
+    <p class="pair-criterion"><span class="crit-tag">Trục 3</span> Phân loại theo <b>tần suất thay đổi</b> — dữ liệu nền ổn định vs dữ liệu sự kiện phát sinh.</p>
+    <div class="cmp">
+      <div class="side" style="--sc:#8b5cf6;--sl:rgba(139,92,246,.3);--sbg:rgba(139,92,246,.06)">
+        <div class="side-head"><i class="ti ti-database-star"></i><h4>Master Data — Dữ liệu chủ</h4></div>
+        <div class="side-mono">stable · reference · single source of truth</div>
+        <ul>
+          <li><i class="ti ti-point"></i>Hồ sơ nhân viên: họ tên, CCCD, ngày sinh, mã NV</li>
+          <li><i class="ti ti-point"></i>Cơ cấu tổ chức: phòng ban, chức danh, cấp bậc</li>
+          <li><i class="ti ti-point"></i>Bảng hệ số lương, danh mục vị trí công việc</li>
+          <li><i class="ti ti-point"></i>Khung năng lực, danh mục kỹ năng chuẩn</li>
+          <li><i class="ti ti-point"></i>Thông tin hợp đồng lao động, loại hợp đồng</li>
+        </ul>
+      </div>
+      <div class="vs"><span>VS</span></div>
+      <div class="side" style="--sc:#ec4899;--sl:rgba(236,72,153,.3);--sbg:rgba(236,72,153,.06)">
+        <div class="side-head"><i class="ti ti-transfer"></i><h4>Transactional — Giao dịch</h4></div>
+        <div class="side-mono">event-based · time-stamped · high-volume</div>
+        <ul>
+          <li><i class="ti ti-point"></i>Chấm công hàng ngày, giờ vào–ra từng ca</li>
+          <li><i class="ti ti-point"></i>Đăng ký tăng ca, đơn xin nghỉ phép từng lần</li>
+          <li><i class="ti ti-point"></i>Phiếu lương hàng tháng (payslip)</li>
+          <li><i class="ti ti-point"></i>Hồ sơ tuyển dụng phát sinh theo từng đợt</li>
+          <li><i class="ti ti-point"></i>Lịch sử đào tạo: ai học khóa gì, ngày nào</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAIR 4 -->
+  <div class="pair">
+    <div class="pair-head">
+      <div class="pair-badge" style="background:linear-gradient(135deg,#f59e0b,#06b6d4)">04</div>
+      <h3>Dữ liệu nóng vs Dữ liệu lạnh</h3>
+    </div>
+    <p class="pair-criterion"><span class="crit-tag">Trục 4</span> Phân loại theo <b>tần suất truy cập</b> — quyết định nơi lưu trữ và chi phí hạ tầng.</p>
+    <div class="cmp">
+      <div class="side" style="--sc:#f59e0b;--sl:rgba(245,158,11,.3);--sbg:rgba(245,158,11,.06)">
+        <div class="side-head"><i class="ti ti-flame"></i><h4>Dữ liệu nóng — Hot data</h4></div>
+        <div class="side-mono">frequent access · low latency · live</div>
+        <ul>
+          <li><i class="ti ti-point"></i>Headcount hiện tại, trạng thái nhân viên</li>
+          <li><i class="ti ti-point"></i>Bảng chấm công của tháng đang chạy</li>
+          <li><i class="ti ti-point"></i>Hồ sơ tuyển dụng đang mở (req active)</li>
+          <li><i class="ti ti-point"></i>KPI hiệu suất của quý hiện tại</li>
+          <li><i class="ti ti-point"></i>Đơn nghỉ phép / tăng ca đang chờ duyệt</li>
+        </ul>
+      </div>
+      <div class="vs"><span>VS</span></div>
+      <div class="side" style="--sc:#60a5fa;--sl:rgba(96,165,250,.3);--sbg:rgba(96,165,250,.06)">
+        <div class="side-head"><i class="ti ti-snowflake"></i><h4>Dữ liệu lạnh — Cold data</h4></div>
+        <div class="side-mono">rare access · archive · compliance-only</div>
+        <ul>
+          <li><i class="ti ti-point"></i>Hồ sơ nhân viên đã nghỉ việc trên 2 năm</li>
+          <li><i class="ti ti-point"></i>Bảng lương các năm cũ đã chốt sổ</li>
+          <li><i class="ti ti-point"></i>Hồ sơ đào tạo hoàn tất từ nhiều năm trước</li>
+          <li><i class="ti ti-point"></i>Biên bản kỷ luật đã kết thúc hiệu lực</li>
+          <li><i class="ti ti-point"></i>Hợp đồng hết hạn — giữ theo luật lao động</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 3 : DRAG SORTER ===== -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">03</div>
+    <h2>Lab tương tác · phân loại bằng kéo–thả</h2>
+  </div>
+  <p class="sec-desc">Chọn một trục, kéo từng mẫu dữ liệu vào đúng nhóm, rồi bấm kiểm tra.</p>
+
+  <div class="lab">
+    <div class="lab-tabs" id="labTabs">
+      <div class="lab-tab on" data-axis="0"><i class="ti ti-ruler-2"></i> Định lượng / Định tính</div>
+      <div class="lab-tab" data-axis="1"><i class="ti ti-layout-grid"></i> Cấu trúc / Bán / Phi cấu trúc</div>
+      <div class="lab-tab" data-axis="2"><i class="ti ti-refresh-alert"></i> Master / Giao dịch</div>
+      <div class="lab-tab" data-axis="3"><i class="ti ti-temperature"></i> Nóng / Lạnh</div>
+    </div>
+    <div class="sorter-hint"><i class="ti ti-info-circle"></i> <span id="hintTxt"></span></div>
+    <div class="sorter-hint"><i class="ti ti-hand-finger"></i> <span>Cách thao tác: <b>kéo–thả</b> mẫu dữ liệu vào nhóm, hoặc <b>bấm chọn</b> một mẫu rồi bấm vào nhóm đích (phù hợp máy tính bảng / điện thoại).</span></div>
+    <div class="chip-pool" id="pool"></div>
+    <div class="bins" id="bins"></div>
+    <div class="lab-foot">
+      <button class="btn primary" id="checkBtn"><i class="ti ti-circle-check"></i> Kiểm tra</button>
+      <button class="btn" id="resetBtn"><i class="ti ti-refresh"></i> Làm lại</button>
+      <div class="score-box" id="scoreBox">Chưa kiểm tra</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 4 : QUIZ ===== -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">04</div>
+    <h2>Quiz nhanh · 8 tình huống thực tế</h2>
+  </div>
+  <p class="sec-desc">Mỗi câu là một tình huống HR ở nhà máy — chọn phân loại đúng và đọc giải thích.</p>
+
+  <div class="quiz">
+    <div id="quizBody">
+      <div class="q-progress" id="qProg">Câu 1 / 8</div>
+      <div class="q-bar"><div class="q-bar-fill" id="qFill"></div></div>
+      <div class="q-text" id="qText"></div>
+      <div class="q-scenario" id="qScen"></div>
+      <div class="q-opts" id="qOpts"></div>
+      <div class="q-explain" id="qExp"></div>
+      <div class="q-foot">
+        <div class="score-box" id="qScore">Điểm: 0 / 8</div>
+        <button class="btn primary" id="qNext" style="display:none"><i class="ti ti-arrow-right"></i> Câu tiếp</button>
+      </div>
+    </div>
+    <div class="q-result" id="qResult">
+      <div class="big" id="qBig"></div>
+      <p id="qMsg"></p>
+      <button class="btn" id="qRetry"><i class="ti ti-refresh"></i> Làm lại quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 5 : ĐÚC KẾT ===== -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">05</div>
+    <h2>Nguyên tắc cần nhớ</h2>
+  </div>
+  <p class="sec-desc">Ba nguyên tắc cốt lõi cần ghi nhớ khi phân loại dữ liệu HR theo chuẩn DAMA.</p>
+
+  <div class="note-grid one">
+    <div class="note-card" style="--nc:#22d3ee">
+      <h4><i class="ti ti-bulb"></i> Nguyên tắc chuẩn DAMA cần nhớ</h4>
+      <ul>
+        <li><i class="ti ti-check"></i><span>Bốn trục phân loại <b>độc lập nhau</b> — một dữ liệu mang đặc tính của cả 4 trục cùng lúc. Ví dụ bảng "lương tháng 5" của TKG đồng thời là định lượng + có cấu trúc + giao dịch + nóng.</span></li>
+        <li><i class="ti ti-check"></i><span>Trục mức độ tổ chức là một <b>phổ liên tục</b>, không phải nhị phân — giữa "có cấu trúc" và "phi cấu trúc" còn lớp <b>bán cấu trúc</b> (JSON, XML, email có header) ngày càng phổ biến.</span></li>
+        <li><i class="ti ti-check"></i><span>Master Data cần <b>một nguồn chân lý duy nhất</b> (single source of truth); trục Nóng/Lạnh quyết định <b>chi phí hạ tầng lưu trữ</b> — không lưu dữ liệu lạnh trên storage đắt tiền.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tkg-box">
+    <h4><i class="ti ti-rocket"></i> Vì sao phân loại đúng là nền móng của HR Analytics</h4>
+    <p>Phân loại dữ liệu không phải bài tập lý thuyết — nó quyết định dữ liệu được lưu ở đâu, làm sạch thế nào và phân tích ra sao. <b>Ví dụ tại TKG:</b> một nhà máy sản xuất giày phát sinh khối lượng dữ liệu giao dịch khổng lồ mỗi ngày từ chấm công và tăng ca của hàng nghìn công nhân. Nếu hệ thống HRIS trộn lẫn Master Data với dữ liệu giao dịch, mọi báo cáo phân tích về sau đều sai lệch. Phân loại đúng ngay từ đầu chính là móng nhà cho mọi dự án HR Analytics.</p>
+    <div class="pipeline">
+      <div class="pstep"><i class="ti ti-tags"></i> Phân loại dữ liệu</div>
+      <span class="parrow"><i class="ti ti-arrow-right"></i></span>
+      <div class="pstep"><i class="ti ti-shield-check"></i> Quản trị chất lượng</div>
+      <span class="parrow"><i class="ti ti-arrow-right"></i></span>
+      <div class="pstep"><i class="ti ti-chart-dots"></i> HR Analytics</div>
+      <span class="parrow"><i class="ti ti-arrow-right"></i></span>
+      <div class="pstep"><i class="ti ti-bulb"></i> Ra quyết định</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>HR Analytics x Generative AI</b> · Chương trình đào tạo TaeKwang Vina · Buổi 3 — Năng lực &amp; Quản lý dữ liệu HR</p>
+  <p style="margin-top:6px">Nội dung phân loại theo chuẩn DAMA-DMBOK · Trang học liệu tương tác</p>
+</footer>
+
+</div>
+
+<script>
+/* ============ DATA ============ */
+/* Cấu trúc tổng quát: mỗi axis có mảng bins[] (2 hoặc 3 nhóm).
+   Mỗi item gắn 'bin' = id nhóm đúng. Icon chỉ dùng tập an toàn của Tabler. */
+const AXES = [
+  {
+    hint:'Số liệu đo lường được vs thông tin mô tả bằng lời.',
+    bins:[
+      {id:'L',name:'Định lượng',ico:'ti-calculator',color:'#22d3ee'},
+      {id:'R',name:'Định tính',ico:'ti-message-circle',color:'#f59e0b'}
+    ],
+    items:[
+      {t:'Lương cơ bản',ico:'ti-cash',bin:'L'},
+      {t:'Điểm hiệu suất 1–5',ico:'ti-star',bin:'L'},
+      {t:'Số giờ tăng ca',ico:'ti-clock',bin:'L'},
+      {t:'Tỷ lệ nghỉ việc %',ico:'ti-percentage',bin:'L'},
+      {t:'Lý do nghỉ việc',ico:'ti-logout',bin:'R'},
+      {t:'Nhận xét của quản lý',ico:'ti-message-circle',bin:'R'},
+      {t:'Ghi chú phỏng vấn',ico:'ti-notes',bin:'R'},
+      {t:'Phản hồi khảo sát mở',ico:'ti-clipboard',bin:'R'}
+    ]
+  },
+  {
+    hint:'Phổ từ tổ chức chặt chẽ → có thẻ mô tả → tự do hoàn toàn.',
+    bins:[
+      {id:'S',name:'Có cấu trúc',ico:'ti-table',color:'#14b8a6'},
+      {id:'M',name:'Bán cấu trúc',ico:'ti-code',color:'#22d3ee'},
+      {id:'U',name:'Phi cấu trúc',ico:'ti-file-stack',color:'#a78bfa'}
+    ],
+    items:[
+      {t:'Bảng lương Payroll',ico:'ti-table',bin:'S'},
+      {t:'Database ATS ứng viên',ico:'ti-database',bin:'S'},
+      {t:'File CSV chấm công',ico:'ti-file-spreadsheet',bin:'S'},
+      {t:'File JSON từ API chấm công',ico:'ti-code',bin:'M'},
+      {t:'Email có header người gửi/ngày',ico:'ti-mail',bin:'M'},
+      {t:'CV được ATS bóc tách (parsed)',ico:'ti-file-description',bin:'M'},
+      {t:'Log hệ thống HRIS',ico:'ti-list-details',bin:'M'},
+      {t:'Video phỏng vấn',ico:'ti-video',bin:'U'},
+      {t:'Hồ sơ scan CCCD (ảnh)',ico:'ti-photo',bin:'U'},
+      {t:'Báo cáo Word văn xuôi',ico:'ti-file-text',bin:'U'}
+    ]
+  },
+  {
+    hint:'Dữ liệu nền ổn định vs sự kiện phát sinh liên tục.',
+    bins:[
+      {id:'L',name:'Master Data',ico:'ti-database',color:'#8b5cf6'},
+      {id:'R',name:'Giao dịch',ico:'ti-arrows-exchange',color:'#ec4899'}
+    ],
+    items:[
+      {t:'Họ tên & CCCD nhân viên',ico:'ti-id-badge-2',bin:'L'},
+      {t:'Cơ cấu phòng ban',ico:'ti-sitemap',bin:'L'},
+      {t:'Bảng hệ số lương',ico:'ti-list-numbers',bin:'L'},
+      {t:'Khung năng lực chuẩn',ico:'ti-stack',bin:'L'},
+      {t:'Chấm công ngày 15/05',ico:'ti-calendar',bin:'R'},
+      {t:'Đơn nghỉ phép tuần này',ico:'ti-file-check',bin:'R'},
+      {t:'Phiếu lương tháng 5',ico:'ti-receipt',bin:'R'},
+      {t:'Lượt đăng ký tăng ca',ico:'ti-clock',bin:'R'}
+    ]
+  },
+  {
+    hint:'Được truy cập hàng ngày vs chỉ lưu trữ cho kiểm toán.',
+    bins:[
+      {id:'L',name:'Dữ liệu nóng',ico:'ti-flame',color:'#f59e0b'},
+      {id:'R',name:'Dữ liệu lạnh',ico:'ti-snowflake',color:'#60a5fa'}
+    ],
+    items:[
+      {t:'Headcount hiện tại',ico:'ti-users',bin:'L'},
+      {t:'KPI quý đang chạy',ico:'ti-chart-line',bin:'L'},
+      {t:'Req tuyển dụng đang mở',ico:'ti-user-search',bin:'L'},
+      {t:'Đơn chờ duyệt hôm nay',ico:'ti-hourglass',bin:'L'},
+      {t:'Hồ sơ NV nghỉ 3 năm trước',ico:'ti-user-off',bin:'R'},
+      {t:'Bảng lương năm 2021',ico:'ti-archive',bin:'R'},
+      {t:'Biên bản kỷ luật đã đóng',ico:'ti-folder',bin:'R'},
+      {t:'Hợp đồng đã hết hạn',ico:'ti-file-x',bin:'R'}
+    ]
+  }
+];
+
+/* ============ SORTER ============ */
+let curAxis=0, dragEl=null, selEl=null;
+const pool=document.getElementById('pool'),
+      binsWrap=document.getElementById('bins'),
+      scoreBox=document.getElementById('scoreBox');
+let dropZones={}; /* binId -> .bin-drop element */
+
+function clearScore(){scoreBox.textContent='Chưa kiểm tra';scoreBox.className='score-box';}
+
+function moveChip(chip,target){
+  if(!chip||!target)return;
+  target.appendChild(chip);
+  chip.classList.remove('ok','bad','dragging','selected');
+  clearScore();
+}
+
+/* drag-drop: handler gắn trên cả .bin (vùng lớn) để không bị chip con chặn */
+function wireDrop(zone,target){
+  zone.addEventListener('dragover',e=>{
+    e.preventDefault();e.dataTransfer.dropEffect='move';zone.classList.add('over');
+  });
+  zone.addEventListener('dragenter',e=>{e.preventDefault();zone.classList.add('over')});
+  zone.addEventListener('dragleave',e=>{
+    if(!zone.contains(e.relatedTarget))zone.classList.remove('over');
+  });
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('over');
+    if(dragEl)moveChip(dragEl,target);
+  });
+  zone.addEventListener('click',e=>{
+    if(e.target.closest('.dchip'))return;
+    if(selEl){moveChip(selEl,target);selEl=null}
+  });
+}
+
+function buildAxis(i){
+  curAxis=i;
+  const a=AXES[i];
+  document.getElementById('hintTxt').textContent=a.hint;
+  /* render các nhóm động */
+  binsWrap.innerHTML='';
+  binsWrap.className='bins'+(a.bins.length===3?' cols3':'');
+  dropZones={};
+  a.bins.forEach(b=>{
+    const bin=document.createElement('div');
+    bin.className='bin';
+    bin.style.setProperty('--bc',b.color);
+    bin.innerHTML='<div class="bin-title"><i class="ti '+b.ico+'"></i> <span>'+b.name+'</span></div>'+
+                  '<div class="bin-drop"></div>';
+    const drop=bin.querySelector('.bin-drop');
+    dropZones[b.id]=drop;
+    wireDrop(bin,drop);
+    binsWrap.appendChild(bin);
+  });
+  /* render chip vào pool */
+  pool.innerHTML='';clearScore();dragEl=null;selEl=null;
+  const shuffled=[...a.items].sort(()=>Math.random()-.5);
+  shuffled.forEach((it,idx)=>{
+    const c=document.createElement('div');
+    c.className='dchip';c.draggable=true;
+    c.dataset.bin=it.bin;c.dataset.id=idx;
+    c.innerHTML='<i class="ti '+it.ico+'"></i>'+it.t;
+    c.addEventListener('dragstart',e=>{
+      dragEl=c;c.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+      try{e.dataTransfer.setData('text/plain',idx)}catch(_){}
+    });
+    c.addEventListener('dragend',()=>{c.classList.remove('dragging');dragEl=null});
+    c.addEventListener('click',()=>{
+      if(selEl===c){c.classList.remove('selected');selEl=null;return}
+      if(selEl)selEl.classList.remove('selected');
+      selEl=c;c.classList.add('selected');
+    });
+    pool.appendChild(c);
+  });
+}
+wireDrop(pool,pool);
+
+document.getElementById('checkBtn').addEventListener('click',()=>{
+  let ok=0,total=AXES[curAxis].items.length;
+  Object.keys(dropZones).forEach(binId=>{
+    [...dropZones[binId].children].forEach(c=>{
+      c.classList.remove('ok','bad');
+      if(c.dataset.bin===binId){c.classList.add('ok');ok++}
+      else c.classList.add('bad');
+    });
+  });
+  const inPool=pool.children.length;
+  scoreBox.textContent='Đúng '+ok+' / '+total+(inPool?' · còn '+inPool+' chưa xếp':'');
+  scoreBox.className='score-box '+(ok===total&&!inPool?'good':ok>=total/2?'mid':'low');
+});
+document.getElementById('resetBtn').addEventListener('click',()=>buildAxis(curAxis));
+document.getElementById('labTabs').addEventListener('click',e=>{
+  const tab=e.target.closest('.lab-tab');if(!tab)return;
+  document.querySelectorAll('.lab-tab').forEach(t=>t.classList.remove('on'));
+  tab.classList.add('on');
+  buildAxis(+tab.dataset.axis);
+});
+buildAxis(0);
+
+/* ============ QUIZ ============ */
+const QUIZ=[
+  {
+    q:'Dữ liệu này thuộc loại nào?',
+    s:'Phòng HR xuất bảng "giờ vào–ra của từng công nhân chuyền A ngày 15/05" từ máy chấm công.',
+    opts:['Master Data','Dữ liệu giao dịch','Dữ liệu định tính','Dữ liệu phi cấu trúc'],
+    correct:1,
+    exp:'Đây là <b>dữ liệu giao dịch</b> — gắn với một sự kiện cụ thể, có mốc thời gian, phát sinh liên tục mỗi ngày. Master Data sẽ là hồ sơ cố định của công nhân đó.'
+  },
+  {
+    q:'Phân loại theo trục "mức độ tổ chức":',
+    s:'HR lưu các file ghi âm buổi phỏng vấn ứng viên để nghe lại khi cần.',
+    opts:['Có cấu trúc','Bán cấu trúc','Phi cấu trúc','Định lượng'],
+    correct:2,
+    exp:'File ghi âm là <b>dữ liệu phi cấu trúc</b> — không có mô hình bảng, cũng không có thẻ mô tả; cần công cụ AI xử lý (ví dụ chuyển giọng nói thành văn bản) trước khi phân tích được.'
+  },
+  {
+    q:'Dữ liệu này thuộc loại nào theo trục mức độ tổ chức?',
+    s:'Máy chấm công của nhà máy xuất dữ liệu ra file JSON, mỗi bản ghi có các khóa như "ma_nv", "gio_vao", "gio_ra".',
+    opts:['Có cấu trúc','Bán cấu trúc','Phi cấu trúc','Master Data'],
+    correct:1,
+    exp:'File JSON là <b>dữ liệu bán cấu trúc</b> — không nằm trong bảng hàng–cột cố định, nhưng có <b>thẻ/khóa tự mô tả</b> ("ma_nv", "gio_vao"...) nên máy vẫn đọc và phân tách được mà không cần AI xử lý như dữ liệu phi cấu trúc.'
+  },
+  {
+    q:'Đâu KHÔNG phải là dữ liệu bán cấu trúc?',
+    s:'HR phân loại các nguồn dữ liệu thu được từ nhiều hệ thống khác nhau.',
+    opts:['Email có header người gửi, ngày, tiêu đề','File XML cấu hình hệ thống','Bảng lương trong cơ sở dữ liệu quan hệ','CV được hệ thống ATS bóc tách thành các trường'],
+    correct:2,
+    exp:'<b>Bảng lương trong CSDL quan hệ</b> là dữ liệu có cấu trúc — nằm trong bảng hàng–cột định sẵn. Ba lựa chọn còn lại đều bán cấu trúc: có thẻ/nhãn mô tả nhưng không theo mô hình bảng cứng.'
+  },
+  {
+    q:'Dữ liệu nào sau đây là Master Data?',
+    s:'HR đang rà soát hệ thống HRIS để xác định đâu là "nguồn chân lý duy nhất".',
+    opts:['Đơn xin nghỉ phép tháng này','Phiếu lương tháng 4','Sơ đồ cơ cấu tổ chức & chức danh','Lượt đăng ký tăng ca hôm qua'],
+    correct:2,
+    exp:'<b>Sơ đồ cơ cấu tổ chức</b> là Master Data — ổn định lâu dài, làm dữ liệu nền tham chiếu. Ba lựa chọn còn lại đều là dữ liệu giao dịch phát sinh theo sự kiện.'
+  },
+  {
+    q:'Phân loại theo trục "tần suất truy cập":',
+    s:'Công ty cần giữ hồ sơ lương của nhân viên đã nghỉ việc 3 năm trước để tuân thủ luật lao động, nhưng gần như không bao giờ mở ra.',
+    opts:['Dữ liệu nóng','Dữ liệu lạnh','Dữ liệu định tính','Dữ liệu có cấu trúc'],
+    correct:1,
+    exp:'Đây là <b>dữ liệu lạnh</b> — hiếm khi truy cập, chỉ giữ cho mục đích tuân thủ. Nên lưu ở storage giá rẻ thay vì hệ thống vận hành đắt tiền. (Lưu ý: nó vẫn đồng thời là dữ liệu có cấu trúc — một dữ liệu thuộc nhiều trục.)'
+  },
+  {
+    q:'Đâu là dữ liệu định tính?',
+    s:'HR tổng hợp kết quả đánh giá 360 độ của một quản lý cấp trung.',
+    opts:['Điểm trung bình 360 (thang 1–5)','Số người tham gia đánh giá','Nhận xét mô tả điểm mạnh/điểm cần cải thiện','Tỷ lệ phản hồi đúng hạn %'],
+    correct:2,
+    exp:'<b>Nhận xét mô tả</b> là dữ liệu định tính — thông tin bằng lời, cần diễn giải. Ba lựa chọn còn lại đều là con số đo lường được, tức định lượng.'
+  },
+  {
+    q:'Tình huống tổng hợp — chọn nhận định ĐÚNG:',
+    s:'Bảng "lương tháng 5/2026 của toàn nhà máy" vừa được hệ thống Payroll tạo.',
+    opts:[
+      'Chỉ là dữ liệu định lượng, không thuộc trục nào khác',
+      'Là Master Data vì liên quan đến lương',
+      'Định lượng + có cấu trúc + giao dịch + nóng cùng lúc',
+      'Là dữ liệu phi cấu trúc vì có nhiều dòng'
+    ],
+    correct:2,
+    exp:'Đúng — một dữ liệu <b>thuộc cả 4 trục cùng lúc</b>. Bảng lương tháng 5 là định lượng (số tiền), có cấu trúc (bảng), giao dịch (phát sinh theo tháng) và nóng (đang dùng). Đây là nguyên tắc cốt lõi của phân loại DAMA.'
+  }
+];
+let qi=0,qScore=0,answered=false;
+const qText=document.getElementById('qText'),qScen=document.getElementById('qScen'),
+      qOpts=document.getElementById('qOpts'),qExp=document.getElementById('qExp'),
+      qProg=document.getElementById('qProg'),qFill=document.getElementById('qFill'),
+      qNext=document.getElementById('qNext'),qScoreEl=document.getElementById('qScore');
+
+function renderQ(){
+  answered=false;
+  const item=QUIZ[qi];
+  qProg.textContent='Câu '+(qi+1)+' / '+QUIZ.length;
+  qFill.style.width=((qi)/QUIZ.length*100)+'%';
+  qText.textContent=item.q;
+  qScen.textContent=item.s;
+  qExp.classList.remove('show');
+  qExp.innerHTML=item.exp;
+  qNext.style.display='none';
+  qOpts.innerHTML='';
+  item.opts.forEach((o,idx)=>{
+    const b=document.createElement('button');
+    b.className='q-opt';
+    b.innerHTML='<span class="dot">'+String.fromCharCode(65+idx)+'</span>'+o;
+    b.addEventListener('click',()=>pickOpt(idx,b));
+    qOpts.appendChild(b);
+  });
+}
+function pickOpt(idx,btn){
+  if(answered)return;
+  answered=true;
+  const item=QUIZ[qi];
+  [...qOpts.children].forEach((b,i)=>{
+    b.classList.add('disabled');
+    if(i===item.correct){b.classList.add('correct');b.querySelector('.dot').innerHTML='<i class="ti ti-check"></i>'}
+  });
+  if(idx===item.correct){qScore++}
+  else{btn.classList.add('wrong');btn.querySelector('.dot').innerHTML='<i class="ti ti-x"></i>'}
+  qScoreEl.textContent='Điểm: '+qScore+' / '+QUIZ.length;
+  qExp.classList.add('show');
+  qNext.style.display='flex';
+  qNext.innerHTML=(qi===QUIZ.length-1)
+    ? '<i class="ti ti-flag-check"></i> Xem kết quả'
+    : '<i class="ti ti-arrow-right"></i> Câu tiếp';
+}
+qNext.addEventListener('click',()=>{
+  if(qi===QUIZ.length-1){showResult()}
+  else{qi++;renderQ()}
+});
+function showResult(){
+  document.getElementById('quizBody').style.display='none';
+  const r=document.getElementById('qResult');
+  r.classList.add('show');
+  document.getElementById('qBig').textContent=qScore+'/'+QUIZ.length;
+  let msg;
+  if(qScore===QUIZ.length)msg='Xuất sắc! Bạn đã nắm vững cả 4 trục phân loại theo chuẩn DAMA.';
+  else if(qScore>=6)msg='Tốt! Bạn hiểu phần lớn nguyên tắc — xem lại các trục còn nhầm là ổn.';
+  else msg='Nên ôn lại phần so sánh từng nhóm ở Section 02 rồi thử lại nhé.';
+  document.getElementById('qMsg').textContent=msg;
+}
+document.getElementById('qRetry').addEventListener('click',()=>{
+  qi=0;qScore=0;qScoreEl.textContent='Điểm: 0 / '+QUIZ.length;
+  document.getElementById('qResult').classList.remove('show');
+  document.getElementById('quizBody').style.display='block';
+  renderQ();
+});
+renderQ();
+</script>
+</body>
+</html>
